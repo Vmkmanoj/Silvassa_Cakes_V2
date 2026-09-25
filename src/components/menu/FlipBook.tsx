@@ -216,6 +216,14 @@ export function FlipBook() {
     react-pageflip reads the parentElement clientWidth to decide
     landscape vs portrait. Giving it exactly 2*pageW ensures it
     always shows two pages on desktop without needing size="stretch".
+
+    CRITICAL: showCover={true} on mobile causes the library to treat
+    the cover as a right-side page in a two-page spread — leaving an
+    invisible empty left page and clipping the right edge. Disable it
+    on mobile so the cover renders as a full single page.
+
+    The `key` prop forces a clean remount when the breakpoint changes
+    so the library never carries over stale two-page orientation state.
   */
   const shellW = isDesktop ? pageW * 2 : pageW;
 
@@ -234,6 +242,7 @@ export function FlipBook() {
         style={{ width: shellW, height: pageH }}
       >
         <HTMLFlipBook
+          key={isDesktop ? "desktop" : "mobile"}
           ref={bookRef}
           className="book-root"
           style={{ display: "block" }}
@@ -245,13 +254,16 @@ export function FlipBook() {
           maxWidth={pageW}
           minHeight={pageH}
           maxHeight={pageH}
-          // Library will switch portrait↔landscape based on container width
-          usePortrait={true}
+          // Portrait = single-page on mobile; auto on desktop (container drives it)
+          usePortrait={!isDesktop}
           // Visual settings
           drawShadow={true}
           maxShadowOpacity={0.3}
           flippingTime={750}
-          showCover={true}
+          // showCover on desktop only — on mobile it causes the cover to be
+          // positioned as the right-side page of a landscape spread, pushing
+          // it off-screen and leaving a blank left half.
+          showCover={isDesktop}
           showPageCorners={true}
           // Interaction
           useMouseEvents={true}
