@@ -5,195 +5,905 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px); --radius-md: calc(var(--radius) - 2px); --radius-lg: var(--radius); --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background); --color-foreground: var(--foreground); --color-card: var(--card); --color-card-foreground: var(--card-foreground);
-  --color-primary: var(--primary); --color-primary-foreground: var(--primary-foreground); --color-secondary: var(--secondary); --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted); --color-muted-foreground: var(--muted-foreground); --color-accent: var(--accent); --color-accent-foreground: var(--accent-foreground);
-  --color-border: var(--border); --color-input: var(--input); --color-ring: var(--ring); --color-destructive: var(--destructive); --color-destructive-foreground: var(--destructive-foreground);
-  --font-display: "Cormorant Garamond", Georgia, serif; --font-body: "Manrope", sans-serif;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Manrope", sans-serif;
 }
 
-/*
-  ── Color system ──────────────────────────────────────────────
-  Primary brand color: #163020 (deep green). Secondary/surface: white.
-  Every other value here is a tint/shade of those two, or a neutral used
-  strictly for shadows, borders, background depth and disabled states.
-  Spacing scale used throughout: 4 / 8 / 12 / 16 / 24 / 32 / 48px.
-*/
+/* ══════════════════════════════════════════════════════════════
+   DESIGN TOKENS
+══════════════════════════════════════════════════════════════ */
 :root {
-  --radius: .5rem;
+  --radius: 0.5rem;
 
-  --primary: #163020;
-  --primary-foreground: #ffffff;
-  --background: #ffffff;
-  --foreground: #163020;
-  --card: #ffffff;
-  --card-foreground: #163020;
-  --secondary: #eef2ef;
+  /* Brand */
+  --primary:              #163020;
+  --primary-foreground:   #ffffff;
+
+  /* Surface */
+  --background:           #ffffff;
+  --foreground:           #163020;
+  --card:                 #ffffff;
+  --card-foreground:      #163020;
+  --secondary:            #eef2ef;
   --secondary-foreground: #163020;
-  --muted: #f3f5f3;
-  --muted-foreground: #5b6c62;
-  --accent: #e7ece8;
-  --accent-foreground: #163020;
-  --border: rgba(22, 48, 32, .14);
-  --input: rgba(22, 48, 32, .22);
-  --ring: #163020;
-  --destructive: #a3372f;
+  --muted:                #f3f5f3;
+  --muted-foreground:     #5b6c62;
+  --accent:               #e7ece8;
+  --accent-foreground:    #163020;
+  --border:               rgba(22, 48, 32, 0.14);
+  --input:                rgba(22, 48, 32, 0.22);
+  --ring:                 #163020;
+  --destructive:          #a3372f;
   --destructive-foreground: #ffffff;
 
-  /* Menu-book specific tokens, all derived from primary + white */
-  --paper: #ffffff;
-  --paper-deep: #eef1ee;
-  --ink: #163020;
-  --ink-soft: #55665c;
-  --line: #163020;
-  --line-soft: rgba(22, 48, 32, .45);
-  --stage: #f4f6f4;
-  --cover: #0e2118;
-  --cover-ink: #ffffff;
-  --cover-overlay: rgba(8, 18, 13, .5);
-  --shadow-book: 0 32px 64px rgba(15, 30, 22, .22), 0 4px 14px rgba(15, 30, 22, .16);
-  --shadow-page: 0 8px 22px rgba(15, 30, 22, .12);
+  /* Book-specific */
+  --paper:         #ffffff;
+  --paper-deep:    #eef1ee;
+  --ink:           #163020;
+  --ink-soft:      #55665c;
+  --line-soft:     rgba(22, 48, 32, 0.45);
+  --stage-bg:      #f4f6f4;
+  --cover-dark:    #0e2118;
+  --cover-ink:     #ffffff;
 }
 
-* { box-sizing: border-box; }
+/* ══════════════════════════════════════════════════════════════
+   RESET + BASE
+══════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; min-height: 100%; overflow-x: hidden; }
-body { background: var(--background); color: var(--foreground); font-family: var(--font-body); }
-button { font: inherit; }
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+}
+button { font: inherit; cursor: pointer; }
 
-.menu-stage { min-height: 100svh; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5.4rem 1rem 1.2rem; isolation: isolate; overflow: hidden; background: radial-gradient(circle at 50% 20%, var(--stage), var(--secondary) 75%); touch-action: pan-y; }
-.menu-stage::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: .5; background-image: repeating-linear-gradient(92deg, transparent 0 7px, rgba(22, 48, 32, .025) 8px, transparent 10px), repeating-linear-gradient(3deg, transparent 0 31px, rgba(22, 48, 32, .02) 32px, transparent 34px); }
-.ambient-mark { position: fixed; right: -3vw; bottom: -18vh; z-index: -1; color: rgba(22, 48, 32, .04); font: 36rem/1 var(--font-display); user-select: none; }
-.menu-masthead { position: absolute; top: 1.5rem; left: 1.5rem; display: flex; align-items: center; gap: .75rem; color: var(--primary); }
-.brand-mark { width: 2rem; height: 2rem; display: grid; place-items: center; border: 1px solid var(--primary); border-radius: 50%; color: var(--primary); font: 600 1.25rem/1 var(--font-display); }
+/* ══════════════════════════════════════════════════════════════
+   STAGE — full-viewport backdrop
+══════════════════════════════════════════════════════════════ */
+.menu-stage {
+  min-height: 100svh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5.5rem 1rem 1rem;
+  isolation: isolate;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 10%,
+    var(--stage-bg) 0%,
+    var(--secondary) 75%);
+  touch-action: pan-y; /* allow page-flip library to handle x-axis */
+}
+
+/* Subtle linen texture overlay */
+.menu-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.5;
+  background-image:
+    repeating-linear-gradient(92deg,
+      transparent 0 7px,
+      rgba(22, 48, 32, 0.022) 8px,
+      transparent 10px),
+    repeating-linear-gradient(3deg,
+      transparent 0 31px,
+      rgba(22, 48, 32, 0.018) 32px,
+      transparent 34px);
+}
+
+/* Large decorative letter in background */
+.ambient-mark {
+  position: fixed;
+  right: -3vw;
+  bottom: -18vh;
+  z-index: -1;
+  color: rgba(22, 48, 32, 0.04);
+  font: 36rem / 1 var(--font-display);
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MASTHEAD
+══════════════════════════════════════════════════════════════ */
+.menu-masthead {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--primary);
+  z-index: 100;
+}
+.brand-mark {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--primary);
+  border-radius: 50%;
+  font: 600 1.25rem / 1 var(--font-display);
+  flex-shrink: 0;
+}
 .menu-masthead div { display: grid; line-height: 1.05; }
-.menu-masthead strong { font: 600 1.15rem var(--font-display); }
-.menu-masthead span:last-child { color: var(--ink-soft); font-size: .55rem; text-transform: uppercase; letter-spacing: .16em; }
+.menu-masthead strong { font: 600 1.1rem var(--font-display); }
+.menu-masthead span:last-child {
+  color: var(--ink-soft);
+  font-size: 0.52rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
 
-.book-shell { width: min(92vw, 1050px); height: min(72vh, 670px); min-height: 520px; position: relative; perspective: 2400px; }
-.book-shell.is-closed { width: min(88vw, 480px); }
-.book-shadow { position: absolute; inset: 4% -4% -5%; border-radius: 45%; background: rgba(15, 30, 22, .18); filter: blur(30px); transform: translateY(18px); }
-.book-pages { width: 100%; height: 100%; display: flex; position: relative; transform-style: preserve-3d; filter: drop-shadow(var(--shadow-book)); }
-.menu-sheet { width: 50%; height: 100%; position: relative; overflow: hidden; background: var(--paper); color: var(--ink); box-shadow: inset 0 0 45px rgba(22, 48, 32, .04); cursor: pointer; }
-.menu-sheet::after, .turning-face::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5; mix-blend-mode: multiply; background-image: repeating-radial-gradient(circle at 0 0, transparent 0 2px, rgba(22, 48, 32, .03) 3px, transparent 4px); background-size: 5px 5px; }
-.sheet-left { border-radius: 4px 0 0 4px; border-right: 1px solid var(--border); box-shadow: inset -30px 0 36px -30px rgba(22, 48, 32, .12), inset 0 0 45px rgba(22, 48, 32, .04); }
-.sheet-right { border-radius: 0 4px 4px 0; box-shadow: inset 30px 0 36px -30px rgba(22, 48, 32, .1), inset 0 0 45px rgba(22, 48, 32, .04); }
-.is-closed .menu-sheet { width: 100%; border-radius: 4px; }
+/* ══════════════════════════════════════════════════════════════
+   BOOK WRAPPER
+══════════════════════════════════════════════════════════════ */
+.book-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
 
-.cover-content { position: relative; height: 100%; overflow: hidden; color: var(--cover-ink); background: var(--cover); padding: 1rem; }
-.cover-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.cover-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8, 18, 13, .35), rgba(8, 18, 13, .78)); }
-.cover-border { position: relative; z-index: 1; height: 100%; border: 1px solid rgba(255, 255, 255, .55); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
-.cover-emblem { width: 4.2rem; height: 4.2rem; display: grid; place-items: center; border: 1px solid #fff; border-radius: 50%; color: #fff; font: 500 2.75rem/1 var(--font-display); margin-bottom: 2.4rem; }
-.cover-border p { margin: 0 0 .7rem; text-transform: uppercase; letter-spacing: .22em; font-size: .65rem; }
-.cover-border h1 { margin: 0; font: 600 clamp(4rem, 9vw, 6rem)/.8 var(--font-display); letter-spacing: 0; }
-.cover-rule { width: min(80%, 15rem); margin: 2rem 0 4.5rem; display: flex; align-items: center; gap: .8rem; color: #fff; font: italic 1.15rem var(--font-display); }
-.cover-rule::before, .cover-rule::after { content: ""; height: 1px; flex: 1; background: rgba(255, 255, 255, .55); }
-.open-menu { display: inline-flex; align-items: center; gap: .55rem; border: 0; background: transparent; color: var(--cover-ink); cursor: pointer; text-transform: uppercase; letter-spacing: .14em; font-size: .62rem; padding: .7rem 1rem; }
-.open-menu svg { width: 1rem; color: #fff; transition: transform .25s ease; }
+/* ── Ambient soft shadow BELOW the book ──────────────────────── */
+.book-ambient-shadow {
+  position: absolute;
+  /* sits below the book-shell, behind it */
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(15, 30, 22, 0.18);
+  filter: blur(28px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── Shell: hard-sized so library knows its orientation ──────── */
+.book-shell {
+  position: relative;
+  z-index: 1;
+  /* The library injects .stf__parent here; no extra overflow needed */
+  overflow: visible;
+}
+
+/* ── Subtle center book spine (desktop only) ─────────────────── */
+.book-spine {
+  position: absolute;
+  top: 3%;
+  bottom: 3%;
+  left: 50%;
+  transform: translateX(-50%);
+  /* Very narrow — just enough to suggest a fold */
+  width: 2px;
+  /* Soft gradient: darker in center, fades to transparent at edges */
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(22, 48, 32, 0.12) 15%,
+    rgba(22, 48, 32, 0.18) 50%,
+    rgba(22, 48, 32, 0.12) 85%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 50;
+  /* inner glow to both sides simulating paper fold */
+  box-shadow:
+    -3px 0 8px rgba(22, 48, 32, 0.06),
+     3px 0 8px rgba(22, 48, 32, 0.06);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   REACT-PAGEFLIP LIBRARY OVERRIDES
+   The library injects .stf__parent, .stf__block, .stf__item
+══════════════════════════════════════════════════════════════ */
+
+/* Parent block: fill the shell exactly */
+.stf__parent {
+  width: 100% !important;
+  height: 100% !important;
+  /* GPU compositing layer for smooth flips */
+  transform: translateZ(0);
+  border-radius: 3px;
+}
+
+/* Subtle drop shadow on the whole book (not individual pages) */
+.book-root .stf__parent {
+  filter:
+    drop-shadow(0 18px 40px rgba(15, 30, 22, 0.2))
+    drop-shadow(0 3px 10px rgba(15, 30, 22, 0.14));
+}
+
+/* Left page: slight inner shadow from the spine */
+.stf__item.--left .book-page {
+  box-shadow: inset -20px 0 28px -20px rgba(22, 48, 32, 0.1);
+}
+
+/* Right page: slight inner shadow from the spine */
+.stf__item.--right .book-page {
+  box-shadow: inset 20px 0 28px -20px rgba(22, 48, 32, 0.08);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PHYSICAL PAGE
+══════════════════════════════════════════════════════════════ */
+.book-page {
+  /* Fill the slot the library gives us */
+  width: 100%;
+  height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  position: relative;
+  overflow: hidden;
+  /* Very subtle paper grain */
+  background-image:
+    repeating-radial-gradient(
+      circle at 0 0,
+      transparent 0 2px,
+      rgba(22, 48, 32, 0.016) 3px,
+      transparent 4px
+    );
+  background-size: 5px 5px;
+}
+
+/* Hard cover pages */
+.book-page--cover {
+  background: var(--cover-dark);
+  background-image: none;
+}
+
+/* Clips content strictly so nothing escapes the physical paper */
+.book-page-inner {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   COVER PAGE
+══════════════════════════════════════════════════════════════ */
+.cover-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: var(--cover-ink);
+  background: var(--cover-dark);
+}
+.cover-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.cover-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 18, 13, 0.35) 0%,
+    rgba(8, 18, 13, 0.75) 100%
+  );
+}
+.cover-border {
+  position: relative;
+  z-index: 1;
+  /* Inset from all four edges — no fixed margin px */
+  margin: 4%;
+  height: calc(100% - 8%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 5% 7%;
+}
+.cover-emblem {
+  width: 4rem;
+  height: 4rem;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  color: #fff;
+  font: 500 2.6rem / 1 var(--font-display);
+  margin-bottom: 1.5rem;
+}
+.cover-border p {
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.62rem;
+}
+.cover-border h1 {
+  margin: 0;
+  font: 600 clamp(3rem, 8vw, 5.5rem) / 0.85 var(--font-display);
+}
+.cover-rule {
+  width: min(80%, 14rem);
+  margin: 1.2rem 0 2.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: #fff;
+  font: italic 1.05rem var(--font-display);
+}
+.cover-rule::before,
+.cover-rule::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.5);
+}
+.open-menu {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 0;
+  background: transparent;
+  color: var(--cover-ink);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.6rem;
+  padding: 0.65rem 0.9rem;
+  flex-shrink: 0;
+}
+.open-menu svg { width: 0.95rem; transition: transform 0.25s ease; }
 .open-menu:hover svg { transform: translateX(4px); }
 
-.page-inner { height: 100%; position: relative; padding: clamp(2rem, 4vw, 3.8rem) clamp(1.8rem, 4vw, 3.6rem) 2.5rem; overflow: hidden; }
-.page-inner::before { content: ""; position: absolute; inset: .8rem; border: 1px solid var(--border); pointer-events: none; }
-.page-heading { position: relative; text-align: center; margin-bottom: 1.4rem; z-index: 1; }
-.page-heading p { color: var(--primary); margin: 0 0 .35rem; text-transform: uppercase; letter-spacing: .19em; font-size: .59rem; font-weight: 700; }
-.page-heading h2 { margin: 0; color: var(--ink); font: 600 clamp(2.35rem, 5vw, 4.2rem)/.9 var(--font-display); letter-spacing: 0; }
-.page-heading span { display: flex; align-items: center; gap: .6rem; justify-content: center; color: var(--primary); font-size: .45rem; margin-top: .75rem; }
-.page-heading span::before, .page-heading span::after { content: ""; height: 1px; width: 2.4rem; background: var(--line-soft); }
+/* ══════════════════════════════════════════════════════════════
+   INTERIOR PAGE LAYOUT
+   Uses flex column so content is distributed vertically.
+   Folio pinned at the bottom via absolute positioning.
+══════════════════════════════════════════════════════════════ */
+.page-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /* Horizontal padding; bottom padding reserves folio space */
+  padding: clamp(1.4rem, 3.5%, 3rem) clamp(1.2rem, 3.5%, 2.8rem) 2.6rem;
+  overflow: hidden;
+}
 
-/* Image container: fixed aspect ratio, consistent across every page (spec §8) */
-.image-container, .menu-photo { position: relative; width: 100%; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 4px; box-shadow: var(--shadow-page); margin-bottom: 1rem; background: var(--paper-deep); }
-.image-container img, .menu-photo img, .image-container .food-image-fallback, .menu-photo .food-image-fallback { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(.94) contrast(.97); }
-.food-image-fallback { display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--paper-deep), var(--secondary)); color: var(--primary); font-size: 1.6rem; }
+/* Decorative inset border */
+.page-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0.5rem;
+  border: 1px solid var(--border);
+  pointer-events: none;
+  z-index: 0;
+}
 
-.menu-items { position: relative; z-index: 1; display: grid; gap: .2rem; }
-.menu-item { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; padding: .62rem 0; border-bottom: 1px dotted var(--border); }
+/* ── Page heading ─────────────────────────────────────────── */
+.page-heading {
+  position: relative;
+  text-align: center;
+  margin-bottom: 0.9rem;
+  z-index: 1;
+  flex-shrink: 0;
+}
+.page-heading p {
+  color: var(--primary);
+  margin: 0 0 0.28rem;
+  text-transform: uppercase;
+  letter-spacing: 0.19em;
+  font-size: 0.54rem;
+  font-weight: 700;
+}
+.page-heading h2 {
+  margin: 0;
+  color: var(--ink);
+  font: 600 clamp(1.9rem, 5.5vw, 3.8rem) / 0.9 var(--font-display);
+}
+.page-heading span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  color: var(--primary);
+  font-size: 0.44rem;
+  margin-top: 0.55rem;
+}
+.page-heading span::before,
+.page-heading span::after {
+  content: "";
+  height: 1px;
+  width: 2rem;
+  background: var(--line-soft);
+}
+
+/* ── Food image ───────────────────────────────────────────── */
+/*
+  Fixed height so images never push items off the page.
+  Uses a percentage of the page height via clamp.
+*/
+.menu-photo,
+.image-container {
+  position: relative;
+  width: 100%;
+  flex-shrink: 0;
+  height: clamp(90px, 20%, 175px);
+  overflow: hidden;
+  border-radius: 3px;
+  box-shadow: 0 4px 14px rgba(15, 30, 22, 0.12);
+  margin-bottom: 0.65rem;
+  background: var(--paper-deep);
+  z-index: 1;
+}
+.menu-photo img,
+.image-container img,
+.menu-photo .food-image-fallback,
+.image-container .food-image-fallback {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.93) contrast(0.97);
+}
+.food-image-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--paper-deep), var(--secondary));
+  color: var(--primary);
+  font-size: 1.5rem;
+}
+
+/* ── Menu items list ──────────────────────────────────────── */
+.menu-items {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  /* Takes remaining height; items are NOT allowed to scroll */
+  flex: 1;
+  overflow: hidden;
+}
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding: 0.44rem 0;
+  border-bottom: 1px dotted var(--border);
+  flex-shrink: 0;
+}
 .menu-item:last-child { border: 0; }
-.menu-item h3 { margin: 0; color: var(--ink); font: 600 1.1rem/1.1 var(--font-display); }
-.menu-item p { color: var(--ink-soft); margin: .18rem 0 0; font-size: .64rem; line-height: 1.35; }
-.menu-item > span { color: var(--primary); font: 700 .8rem var(--font-body); white-space: nowrap; padding-top: .1rem; }
-.page-folio { position: absolute; bottom: 1.2rem; left: 50%; transform: translateX(-50%); color: var(--ink-soft); font: 600 .6rem var(--font-body); letter-spacing: .15em; }
+.menu-item h3 {
+  margin: 0;
+  color: var(--ink);
+  font: 600 0.98rem / 1.1 var(--font-display);
+}
+.menu-item p {
+  color: var(--ink-soft);
+  margin: 0.1rem 0 0;
+  font-size: 0.58rem;
+  line-height: 1.3;
+}
+.menu-item > span {
+  color: var(--primary);
+  font: 700 0.76rem var(--font-body);
+  white-space: nowrap;
+  padding-top: 0.08rem;
+  flex-shrink: 0;
+}
 
-.welcome-page { display: flex; flex-direction: column; justify-content: center; }
-.welcome-copy { max-width: 22rem; margin: .5rem auto 2.3rem; color: var(--ink-soft); text-align: center; font: 400 1rem/1.8 var(--font-display); }
-.chef-note { border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); margin: 0 auto; padding: 1.5rem 1rem; text-align: center; max-width: 20rem; }
-.chef-note > span { color: var(--primary); font: 3rem/.5 var(--font-display); }
-.chef-note p { margin: .5rem 0; color: var(--ink); font: italic 1.15rem/1.35 var(--font-display); }
-.chef-note strong { color: var(--ink-soft); text-transform: uppercase; font-size: .52rem; letter-spacing: .15em; }
-.botanical { text-align: center; color: var(--primary); margin-top: 2rem; }
+/* ── Folio number ─────────────────────────────────────────── */
+.page-folio {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--ink-soft);
+  font: 600 0.56rem var(--font-body);
+  letter-spacing: 0.15em;
+  z-index: 2;
+  /* Never overlaps content because page-inner has 2.6rem bottom padding */
+}
 
-.offers-page { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.offer-seal { width: 9rem; height: 9rem; flex: 0 0 auto; border: 1px solid var(--primary); outline: 1px solid var(--line-soft); outline-offset: .35rem; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.offer-seal svg { width: 1rem; color: var(--primary); }
-.offer-seal strong { color: var(--ink); font: 600 1.8rem var(--font-display); }
-.offer-seal span { width: 6rem; color: var(--ink-soft); font-size: .5rem; text-transform: uppercase; letter-spacing: .1em; }
-.offer-copy { max-width: 22rem; color: var(--ink-soft); font: .85rem/1.6 var(--font-display); margin: 1.3rem 0; }
-.contact-list { width: 100%; display: grid; gap: .45rem; border-top: 1px solid var(--line-soft); padding-top: 1rem; }
-.contact-list span { display: flex; align-items: center; justify-content: center; gap: .45rem; color: var(--ink-soft); font-size: .58rem; }
-.contact-list svg { width: .8rem; height: .8rem; color: var(--primary); }
+/* ── Welcome page ─────────────────────────────────────────── */
+.welcome-page { justify-content: center; }
+.welcome-copy {
+  max-width: 22rem;
+  margin: 0.35rem auto 1.6rem;
+  color: var(--ink-soft);
+  text-align: center;
+  font: 400 0.92rem / 1.75 var(--font-display);
+}
+.chef-note {
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+  margin: 0 auto;
+  padding: 1.1rem 1rem;
+  text-align: center;
+  max-width: 20rem;
+}
+.chef-note > span { color: var(--primary); font: 2.8rem / 0.5 var(--font-display); }
+.chef-note p {
+  margin: 0.45rem 0;
+  color: var(--ink);
+  font: italic 1.05rem / 1.32 var(--font-display);
+}
+.chef-note strong {
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+}
+.botanical { text-align: center; color: var(--primary); margin-top: 1.3rem; }
+
+/* ── Offers / Contact page ────────────────────────────────── */
+.offers-page {
+  align-items: center;
+  text-align: center;
+}
+.offer-seal {
+  width: 7.5rem;
+  height: 7.5rem;
+  flex-shrink: 0;
+  border: 1px solid var(--primary);
+  outline: 1px solid var(--line-soft);
+  outline-offset: 0.3rem;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.offer-seal svg { width: 0.95rem; color: var(--primary); }
+.offer-seal strong { color: var(--ink); font: 600 1.5rem var(--font-display); }
+.offer-seal span {
+  width: 5.5rem;
+  color: var(--ink-soft);
+  font-size: 0.46rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.offer-copy {
+  max-width: 22rem;
+  color: var(--ink-soft);
+  font: 0.8rem / 1.55 var(--font-display);
+  margin: 0.9rem 0;
+}
+.contact-list {
+  width: 100%;
+  display: grid;
+  gap: 0.38rem;
+  border-top: 1px solid var(--line-soft);
+  padding-top: 0.75rem;
+}
+.contact-list span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  color: var(--ink-soft);
+  font-size: 0.55rem;
+}
+.contact-list svg { width: 0.75rem; height: 0.75rem; color: var(--primary); }
 .thank-you { margin-top: auto; display: grid; }
-.thank-you span { color: var(--ink); font: italic 1.7rem var(--font-display); }
-.thank-you small { color: var(--ink-soft); font-size: .5rem; text-transform: uppercase; letter-spacing: .1em; }
+.thank-you span { color: var(--ink); font: italic 1.55rem var(--font-display); }
+.thank-you small {
+  color: var(--ink-soft);
+  font-size: 0.48rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
 
-.turning-sheet { position: absolute; z-index: 20; width: 50%; height: 100%; transform-style: preserve-3d; pointer-events: none; }
-.turning-face { position: absolute; inset: 0; overflow: hidden; backface-visibility: hidden; background: var(--paper); color: var(--ink); box-shadow: -12px 5px 30px rgba(15, 30, 22, .22); }
-.turning-back { transform: rotateY(180deg); filter: brightness(.96); }
-.turn-next { right: 0; transform-origin: left center; animation: page-turn-next 760ms cubic-bezier(.62, .02, .18, 1) forwards; }
-.turn-previous { left: 0; transform-origin: right center; animation: page-turn-previous 760ms cubic-bezier(.62, .02, .18, 1) forwards; }
-.turn-next .turning-face::before, .turn-previous .turning-face::before { content: ""; position: absolute; inset: 0; z-index: 20; background: linear-gradient(90deg, rgba(8, 18, 13, .18), transparent 35%, rgba(255, 255, 255, .35)); animation: page-light 760ms ease-in-out; pointer-events: none; }
-@keyframes page-turn-next { 0% { transform: rotateY(0deg); } 45% { transform: rotateY(-88deg); } 100% { transform: rotateY(-180deg); } }
-@keyframes page-turn-previous { 0% { transform: rotateY(0deg); } 45% { transform: rotateY(88deg); } 100% { transform: rotateY(180deg); } }
-@keyframes page-light { 0%, 100% { opacity: .1; } 48% { opacity: .85; } }
+/* ══════════════════════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════════════════════ */
+.menu-controls {
+  height: 3.8rem;
+  display: flex;
+  align-items: center;
+  gap: clamp(2rem, 8vw, 6rem);
+  color: var(--primary);
+}
+.page-control {
+  width: 2.6rem;
+  height: 2.6rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-soft);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--primary);
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+.page-control:hover:not(:disabled) {
+  background: var(--primary);
+  color: #fff;
+  transform: scale(1.06);
+}
+.page-control:disabled { opacity: 0.3; cursor: default; }
+.page-control svg { width: 0.95rem; }
 
-.menu-controls { height: 4rem; display: flex; align-items: center; gap: clamp(2rem, 8vw, 7rem); color: var(--primary); }
-.page-control { width: 2.7rem; height: 2.7rem; display: grid; place-items: center; border: 1px solid var(--line-soft); border-radius: 50%; background: var(--card); color: var(--primary); cursor: pointer; transition: background .2s ease, color .2s ease, transform .2s ease, opacity .2s ease; }
-.page-control:hover:not(:disabled) { background: var(--primary); color: #fff; transform: scale(1.05); }
-.page-control:disabled { opacity: .3; cursor: default; }
-.page-control svg { width: 1rem; }
-.page-status { min-width: 6rem; display: grid; place-items: center; gap: .2rem; }
-.page-status span { color: var(--primary); font: 600 .72rem var(--font-body); letter-spacing: .13em; }
-.page-status small { color: var(--ink-soft); font-size: .5rem; text-transform: uppercase; letter-spacing: .12em; }
+.page-status { min-width: 5.5rem; display: grid; place-items: center; gap: 0.18rem; }
+.page-status span { color: var(--primary); font: 600 0.7rem var(--font-body); letter-spacing: 0.13em; }
+.page-status small { color: var(--ink-soft); font-size: 0.47rem; text-transform: uppercase; letter-spacing: 0.12em; }
 
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE ADJUSTMENTS
+   Desktop styles (above) are untouched.
+   All mobile overrides are isolated inside max-width: 899px.
+══════════════════════════════════════════════════════════════ */
+
+/* ── Desktop: slight extra top padding on very wide screens ── */
+@media (min-width: 1400px) {
+  .menu-stage { padding-top: 6rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MOBILE  (< 900 px wide)
+   ─────────────────────────────────────────────────────────────
+   Key layout constants — must match the JS useBookLayout values:
+     HEADER_H  = 52 px   (compact masthead)
+     NAV_H     = 56 px   (navigation bar)
+     SAFE_H    = 36 px   (notch + home indicator)
+     STAGE_PAD = 16 px   (breathing room)
+
+   The stage uses `min-height: 100dvh` (dynamic viewport height)
+   so it correctly accounts for mobile browser chrome
+   (address bar shown/hidden) on iOS Safari, Chrome, etc.
+══════════════════════════════════════════════════════════════ */
 @media (max-width: 899px) {
-  .menu-stage { padding: 4.7rem .85rem .7rem; justify-content: flex-start; touch-action: none; }
-  .menu-masthead { top: 1rem; left: 1rem; }
-  .book-shell, .book-shell.is-closed { width: min(92vw, 440px); height: min(74svh, 650px); min-height: 500px; margin-top: auto; }
-  .book-pages { display: block; }
-  .menu-sheet { width: 100%; border-radius: 4px; }
-  .turning-sheet { width: 100%; right: 0; }
-  .turn-next { transform-origin: left center; }
-  .turn-previous { transform-origin: right center; }
-  .page-inner { padding: 2.3rem 2rem 2rem; }
-  .page-heading h2 { font-size: clamp(2.5rem, 12vw, 3.8rem); }
-  .menu-item { padding: .55rem 0; }
-  .menu-item h3 { font-size: 1.05rem; }
-  .menu-item p { font-size: .61rem; }
-  .menu-controls { margin-top: auto; gap: 2.2rem; }
-  .page-status small { font-size: .47rem; }
-}
-@media (max-height: 700px) {
-  .book-shell, .book-shell.is-closed { height: 72svh; min-height: 440px; }
-  .page-inner { padding-top: 1.8rem; }
-  .page-heading { margin-bottom: .7rem; }
-  .menu-photo, .image-container { max-height: 26vh; }
-  .menu-item { padding: .38rem 0; }
-  .offer-seal { width: 6rem; height: 6rem; }
-  .offer-copy { margin: .7rem 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .turn-next, .turn-previous { animation-duration: 1ms; }
-  .turn-next .turning-face::before, .turn-previous .turning-face::before { animation: none; }
+
+  /* ── Safe-area custom properties ─────────────────────────── */
+  :root {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bot: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* ── Stage ───────────────────────────────────────────────── */
+  /*
+    Uses 100dvh so the stage fills the true visible height
+    on mobile (not the speculative 100vh which can be wrong
+    when the browser address bar is present).
+
+    Padding top = compact header height + safe area.
+    Padding bottom = safe area only (nav sits inside the flow).
+    We let flex justify-content: center do the vertical centering
+    between header and nav.
+  */
+  .menu-stage {
+    min-height: 100dvh;
+    /* Fallback for browsers without dvh support */
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* top: header zone; sides: small; bottom: nav sits in flow */
+    padding:
+      calc(52px + var(--safe-top, 0px))   /* top — clears compact header */
+      0.75rem                              /* sides */
+      calc(8px + var(--safe-bot, 0px));    /* bottom — nav is in flow */
+    /* Let the flip library own horizontal touch */
+    touch-action: none;
+    /* Don't clip the page drop-shadow */
+    overflow: visible;
+  }
+
+  /* ── Compact masthead ────────────────────────────────────── */
+  /*
+    Height = 52 px to match HEADER_H constant in useBookLayout.
+    Reduce logo and typography to avoid eating too much space.
+  */
+  .menu-masthead {
+    top: calc(0.6rem + var(--safe-top, 0px));
+    left: 0.9rem;
+    gap: 0.55rem;
+    /* Explicitly fixed height so JS constant is reliable */
+    height: 36px;
+    align-items: center;
+  }
+  .brand-mark {
+    width: 1.7rem;
+    height: 1.7rem;
+    font-size: 1.05rem;
+  }
+  .menu-masthead strong { font-size: 0.95rem; }
+  .menu-masthead span:last-child { font-size: 0.46rem; }
+
+  /* ── Book wrapper ────────────────────────────────────────── */
+  /*
+    Gap between book and navigation reduced on mobile.
+    The wrapper is centered by the stage flexbox above.
+  */
+  .book-wrapper {
+    gap: 0.75rem;
+    width: 100%;
+    align-items: center;
+  }
+
+  /* ── Navigation ──────────────────────────────────────────── */
+  /*
+    Height = 56 px to match NAV_H constant in useBookLayout.
+    Slightly tighter gap between buttons.
+  */
+  .menu-controls {
+    height: 56px;
+    gap: clamp(1.5rem, 6vw, 3.5rem);
+    padding: 0 0.5rem;
+  }
+  .page-control {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+  .page-status { min-width: 5rem; }
+  .page-status span { font-size: 0.68rem; }
+  .page-status small { font-size: 0.43rem; }
+
+  /* ── Interior page padding ───────────────────────────────── */
+  /*
+    All padding values are percentage-based so they scale with
+    the dynamically calculated page dimensions.
+  */
+  .page-inner {
+    padding: 5% 5% 2.8rem;
+  }
+
+  /* ── Page heading ────────────────────────────────────────── */
+  .page-heading {
+    margin-bottom: 0.7rem;
+  }
+  .page-heading p {
+    font-size: 0.5rem;
+    margin-bottom: 0.2rem;
+  }
+  .page-heading h2 {
+    /* Viewport-relative so it scales on every phone size */
+    font-size: clamp(1.8rem, 9vw, 3rem);
+  }
+  .page-heading span {
+    margin-top: 0.45rem;
+    font-size: 0.4rem;
+  }
+
+  /* ── Food image ──────────────────────────────────────────── */
+  /*
+    Percentage-based height so it scales proportionally
+    as the page dimensions change between phone sizes.
+    16% of page height keeps items below visible.
+  */
+  .menu-photo,
+  .image-container {
+    height: clamp(75px, 16%, 145px);
+    margin-bottom: 0.55rem;
+  }
+
+  /* ── Menu items ──────────────────────────────────────────── */
+  .menu-item {
+    padding: 0.38rem 0;
+    gap: 0.6rem;
+  }
+  .menu-item h3 {
+    font-size: clamp(0.82rem, 3.5vw, 1rem);
+  }
+  .menu-item p {
+    font-size: clamp(0.5rem, 2vw, 0.58rem);
+    margin-top: 0.08rem;
+  }
+  .menu-item > span {
+    font-size: clamp(0.68rem, 2.5vw, 0.76rem);
+  }
+
+  /* ── Folio ───────────────────────────────────────────────── */
+  .page-folio {
+    bottom: 0.6rem;
+    font-size: 0.5rem;
+  }
+
+  /* ── Welcome page ────────────────────────────────────────── */
+  .welcome-copy {
+    font-size: clamp(0.8rem, 3vw, 0.92rem);
+    margin-bottom: 1.2rem;
+    line-height: 1.65;
+  }
+  .chef-note {
+    padding: 0.9rem 0.8rem;
+  }
+  .chef-note > span { font-size: 2.2rem; }
+  .chef-note p { font-size: 0.95rem; }
+  .botanical { margin-top: 1rem; }
+
+  /* ── Offers page ─────────────────────────────────────────── */
+  .offer-seal {
+    width: 6.5rem;
+    height: 6.5rem;
+  }
+  .offer-seal strong { font-size: 1.3rem; }
+  .offer-copy {
+    font-size: 0.75rem;
+    margin: 0.7rem 0;
+    line-height: 1.5;
+  }
+  .contact-list { gap: 0.3rem; padding-top: 0.6rem; }
+  .contact-list span { font-size: 0.52rem; }
+  .thank-you span { font-size: 1.35rem; }
+
+  /* ── Cover ───────────────────────────────────────────────── */
+  .cover-emblem {
+    width: 3.4rem;
+    height: 3.4rem;
+    font-size: 2.2rem;
+    margin-bottom: 1.1rem;
+  }
+  .cover-border h1 {
+    font-size: clamp(2.8rem, 12vw, 5rem);
+  }
+  .cover-rule { margin: 1rem 0 2rem; }
+
+  /* ── Hide oversized ambient mark on mobile ───────────────── */
+  .ambient-mark { display: none; }
 }
 
-/* Mobile single-page book: horizontal rotateY turn hinged on the left edge */
-.m-book { position: relative; width: min(92vw, 440px); height: min(72svh, 650px); min-height: 460px; margin-top: auto; perspective: 1800px; perspective-origin: 50% 50%; touch-action: pan-y; user-select: none; box-shadow: var(--shadow-book); border-radius: 4px; }
-.m-page, .m-face { position: absolute; inset: 0; overflow: hidden; border-radius: 4px; background: var(--paper); color: var(--ink); box-shadow: inset 0 0 45px rgba(22, 48, 32, .04); }
-.m-page .cover-content, .m-face .cover-content { height: 100%; }
-.m-under-shade { position: absolute; inset: 0; pointer-events: none; z-index: 5; background: linear-gradient(90deg, rgba(9, 20, 15, .5), rgba(9, 20, 15, .12) 60%, transparent); }
-.m-sheet { position: absolute; inset: 0; z-index: 10; transform-origin: left center; transform-style: preserve-3d; will-change: transform; pointer-events: none; }
-.m-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.m-back { transform: rotateY(180deg); background: var(--paper); filter: brightness(.96); }
-.m-curl { position: absolute; inset: 0; z-index: 6; pointer-events: none; background: linear-gradient(90deg, transparent 0%, transparent 45%, rgba(255, 255, 255, .4) 70%, rgba(9, 20, 15, .2) 100%); }
-.m-curl-back { background: linear-gradient(270deg, transparent 40%, rgba(9, 20, 15, .18) 100%); }
-.m-cast { position: absolute; inset: 0; pointer-events: none; transform: translateZ(-1px); box-shadow: 0 10px 40px rgba(15, 30, 22, .28); border-radius: 4px; }
-@media (prefers-reduced-motion: reduce) { .m-sheet, .m-curl, .m-under-shade { transition-duration: 1ms !important; } }
+/* ── Very short phones (e.g. iPhone SE: 375 × 667) ──────────── */
+/*
+  Extra squeeze: tighter spacing inside the page so items don't
+  get clipped on the smallest phone screens still in use.
+  The book dimensions are already handled by the JS aspect-ratio
+  constraint; these rules only tune internal page spacing.
+*/
+@media (max-width: 899px) and (max-height: 680px) {
+  .page-inner { padding: 4% 4.5% 2.4rem; }
+  .page-heading { margin-bottom: 0.5rem; }
+  .page-heading h2 { font-size: clamp(1.6rem, 8vw, 2.5rem); }
+  .menu-photo, .image-container { height: clamp(60px, 14%, 115px); }
+  .menu-item { padding: 0.3rem 0; }
+  .menu-item h3 { font-size: 0.82rem; }
+  .offer-seal { width: 5.5rem; height: 5.5rem; }
+  .offer-copy { margin: 0.5rem 0; }
+  .welcome-copy { font-size: 0.78rem; line-height: 1.55; margin-bottom: 0.9rem; }
+  .chef-note { padding: 0.7rem 0.8rem; }
+  .chef-note > span { font-size: 1.9rem; }
+  .chef-note p { font-size: 0.88rem; }
+}
+
+/* ── Reduce motion ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 1ms !important; animation-duration: 1ms !important; }
+}
+

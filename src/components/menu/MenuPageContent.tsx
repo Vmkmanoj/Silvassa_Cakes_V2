@@ -71,7 +71,7 @@ export function MenuPageContent({
         <PageHeading eyebrow={page.eyebrow} title={page.title} />
         <p className="welcome-copy">{page.subtitle}</p>
         <div className="chef-note">
-          <span>“</span>
+          <span>"</span>
           <p>We bake not to impress, but to make your day taste a little warmer.</p>
           <strong>— The Slivasa Kitchen</strong>
         </div>
@@ -90,7 +90,7 @@ export function MenuPageContent({
         <div className="offer-seal">
           <Sparkles />
           <strong>10% off</strong>
-          <span>Brownie & beverage pairing</span>
+          <span>Brownie &amp; beverage pairing</span>
         </div>
         <p className="offer-copy">{page.subtitle}</p>
         <div className="contact-list">
@@ -116,6 +116,7 @@ export function MenuPageContent({
     );
   }
 
+  // kind === "menu"
   return (
     <div className="page-inner menu-list-page">
       <PageHeading eyebrow={page.eyebrow} title={page.title} />
