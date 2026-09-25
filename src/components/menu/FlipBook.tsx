@@ -69,18 +69,19 @@ function useBookLayout() {
   const BREAKPOINT = 900; // px — anything ≥ this is desktop
 
   // Mobile overhead constants (must match CSS variables below)
-  const HEADER_H  = 52;  // compact mobile masthead
-  const NAV_H     = 56;  // navigation bar
-  const SAFE_H    = 36;  // safe-area top + bottom allowance
-  const STAGE_PAD = 16;  // extra breathing room
-  const TOTAL_OH  = HEADER_H + NAV_H + SAFE_H + STAGE_PAD;
+  // No external header — masthead removed from the page shell.
+  // Only navigation bar + tiny safe-area padding.
+  const NAV_H     = 36;  // compact nav bar (2.2rem ≈ 35px)
+  const SAFE_H    = 20;  // safe-area top + bottom (env insets)
+  const STAGE_PAD = 8;   // 4px top + 4px bottom stage padding
+  const TOTAL_OH  = NAV_H + SAFE_H + STAGE_PAD;
 
   // Target page aspect ratio: width ÷ height (portrait, like a real menu)
   const ASPECT = 2 / 3; // 0.667 — narrower than A4, feels like a restaurant menu
 
-  // Max page dimensions so it doesn't look comically large on tall phones
-  const MAX_W = 420;
-  const MAX_H = 680;
+  // Max page dimensions — raised so bigger phones fill more screen
+  const MAX_W = 480;
+  const MAX_H = 800;
 
   function calc() {
     if (typeof window === "undefined") {
@@ -91,12 +92,15 @@ function useBookLayout() {
     const isDesktop = vw >= BREAKPOINT;
 
     if (isDesktop) {
-      // ── Desktop: unchanged ──────────────────────────────────
+      // ── Desktop: maximise book in available space ────────────
       const vh = window.innerHeight;
-      const bookW = Math.min(Math.floor(vw * 0.88), 1080);
+      // 95% of viewport width for the two-page spread (was 88%)
+      const bookW = Math.min(Math.floor(vw * 0.95), 1280);
       const pageW = Math.floor(bookW / 2);
-      const available = vh - 180;
-      const pageH = Math.min(Math.max(Math.floor(available), 480), 700);
+      // Navigation ≈ 42px + minimal top/bottom padding ≈ 16px total
+      const available = vh - 58;
+      // No hard 700px cap — allow up to 90% of viewport height
+      const pageH = Math.min(Math.max(Math.floor(available), 480), Math.floor(vh * 0.90));
       return { pageW, pageH, isDesktop };
     }
 
@@ -106,7 +110,7 @@ function useBookLayout() {
     // browser address bar (unlike window.innerHeight which can differ
     // between browsers when the address bar is shown/hidden).
     const visH = window.visualViewport?.height ?? window.innerHeight;
-    const availW = Math.floor(vw * 0.92); // 92 vw usable width
+    const availW = Math.floor(vw * 0.97); // 97 vw — nearly full screen width
     const availH = Math.max(Math.floor(visH - TOTAL_OH), 360); // never below 360
 
     // Option A: width-constrained

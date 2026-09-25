@@ -90,7 +90,8 @@ button { font: inherit; cursor: pointer; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 5.5rem 1rem 1rem;
+  /* Tiny safe margin — let the book fill the screen */
+  padding: 0.5rem 0.5rem;
   isolation: isolate;
   overflow: hidden;
   background: radial-gradient(ellipse at 50% 10%,
@@ -130,36 +131,8 @@ button { font: inherit; cursor: pointer; }
 }
 
 /* ══════════════════════════════════════════════════════════════
-   MASTHEAD
+   MASTHEAD — removed; branding lives inside the book cover
 ══════════════════════════════════════════════════════════════ */
-.menu-masthead {
-  position: absolute;
-  top: 1.5rem;
-  left: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: var(--primary);
-  z-index: 100;
-}
-.brand-mark {
-  width: 2rem;
-  height: 2rem;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--primary);
-  border-radius: 50%;
-  font: 600 1.25rem / 1 var(--font-display);
-  flex-shrink: 0;
-}
-.menu-masthead div { display: grid; line-height: 1.05; }
-.menu-masthead strong { font: 600 1.1rem var(--font-display); }
-.menu-masthead span:last-child {
-  color: var(--ink-soft);
-  font-size: 0.52rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-}
 
 /* ══════════════════════════════════════════════════════════════
    BOOK WRAPPER
@@ -169,7 +142,8 @@ button { font: inherit; cursor: pointer; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.2rem;
+  /* 10px between book bottom and navigation */
+  gap: 10px;
 }
 
 /* ── Ambient soft shadow BELOW the book ──────────────────────── */
@@ -631,15 +605,18 @@ button { font: inherit; cursor: pointer; }
    NAVIGATION
 ══════════════════════════════════════════════════════════════ */
 .menu-controls {
-  height: 3.8rem;
+  /* Compact nav — no wasted vertical space */
+  height: 2.6rem;
   display: flex;
   align-items: center;
-  gap: clamp(2rem, 8vw, 6rem);
+  /* Arrows stay close to centre, not spread to screen edges */
+  gap: clamp(1rem, 4vw, 3rem);
   color: var(--primary);
+  padding: 0;
 }
 .page-control {
-  width: 2.6rem;
-  height: 2.6rem;
+  width: 2.2rem;
+  height: 2.2rem;
   display: grid;
   place-items: center;
   border: 1px solid var(--line-soft);
@@ -658,11 +635,11 @@ button { font: inherit; cursor: pointer; }
   transform: scale(1.06);
 }
 .page-control:disabled { opacity: 0.3; cursor: default; }
-.page-control svg { width: 0.95rem; }
+.page-control svg { width: 0.85rem; }
 
-.page-status { min-width: 5.5rem; display: grid; place-items: center; gap: 0.18rem; }
-.page-status span { color: var(--primary); font: 600 0.7rem var(--font-body); letter-spacing: 0.13em; }
-.page-status small { color: var(--ink-soft); font-size: 0.47rem; text-transform: uppercase; letter-spacing: 0.12em; }
+.page-status { min-width: 4.5rem; display: grid; place-items: center; gap: 2px; }
+.page-status span { color: var(--primary); font: 600 0.68rem var(--font-body); letter-spacing: 0.13em; }
+.page-status small { color: var(--ink-soft); font-size: 0.44rem; text-transform: uppercase; letter-spacing: 0.1em; line-height: 1; }
 
 /* ══════════════════════════════════════════════════════════════
    RESPONSIVE ADJUSTMENTS
@@ -670,9 +647,9 @@ button { font: inherit; cursor: pointer; }
    All mobile overrides are isolated inside max-width: 899px.
 ══════════════════════════════════════════════════════════════ */
 
-/* ── Desktop: slight extra top padding on very wide screens ── */
+/* ── Desktop: keep stage tight even on ultra-wide screens ── */
 @media (min-width: 1400px) {
-  .menu-stage { padding-top: 6rem; }
+  .menu-stage { padding: 0.75rem 1rem; }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -715,66 +692,38 @@ button { font: inherit; cursor: pointer; }
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* top: header zone; sides: small; bottom: nav sits in flow */
+    /* Minimal padding — book fills nearly the full screen */
     padding:
-      calc(52px + var(--safe-top, 0px))   /* top — clears compact header */
-      0.75rem                              /* sides */
-      calc(8px + var(--safe-bot, 0px));    /* bottom — nav is in flow */
+      calc(4px + var(--safe-top, 0px))    /* top safe area only */
+      4px                                  /* sides */
+      calc(4px + var(--safe-bot, 0px));    /* bottom safe area only */
     /* Let the flip library own horizontal touch */
     touch-action: none;
     /* Don't clip the page drop-shadow */
     overflow: visible;
   }
 
-  /* ── Compact masthead ────────────────────────────────────── */
-  /*
-    Height = 52 px to match HEADER_H constant in useBookLayout.
-    Reduce logo and typography to avoid eating too much space.
-  */
-  .menu-masthead {
-    top: calc(0.6rem + var(--safe-top, 0px));
-    left: 0.9rem;
-    gap: 0.55rem;
-    /* Explicitly fixed height so JS constant is reliable */
-    height: 36px;
-    align-items: center;
-  }
-  .brand-mark {
-    width: 1.7rem;
-    height: 1.7rem;
-    font-size: 1.05rem;
-  }
-  .menu-masthead strong { font-size: 0.95rem; }
-  .menu-masthead span:last-child { font-size: 0.46rem; }
-
   /* ── Book wrapper ────────────────────────────────────────── */
-  /*
-    Gap between book and navigation reduced on mobile.
-    The wrapper is centered by the stage flexbox above.
-  */
+  /* 6px between physical page and navigation on mobile */
   .book-wrapper {
-    gap: 0.75rem;
+    gap: 6px;
     width: 100%;
     align-items: center;
   }
 
-  /* ── Navigation ──────────────────────────────────────────── */
-  /*
-    Height = 56 px to match NAV_H constant in useBookLayout.
-    Slightly tighter gap between buttons.
-  */
+  /* ── Navigation — very compact on mobile ─────────────────── */
   .menu-controls {
-    height: 56px;
-    gap: clamp(1.5rem, 6vw, 3.5rem);
-    padding: 0 0.5rem;
+    height: 2.2rem;
+    gap: clamp(1rem, 5vw, 2.5rem);
+    padding: 0;
   }
   .page-control {
-    width: 2.4rem;
-    height: 2.4rem;
+    width: 2rem;
+    height: 2rem;
   }
-  .page-status { min-width: 5rem; }
-  .page-status span { font-size: 0.68rem; }
-  .page-status small { font-size: 0.43rem; }
+  .page-status { min-width: 4rem; }
+  .page-status span { font-size: 0.64rem; }
+  .page-status small { font-size: 0.4rem; }
 
   /* ── Interior page padding ───────────────────────────────── */
   /*

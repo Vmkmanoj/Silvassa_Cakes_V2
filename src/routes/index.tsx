@@ -29,14 +29,6 @@ function SlivasaMenu() {
       <div className="ambient-mark" aria-hidden="true">
         S
       </div>
-      <header className="menu-masthead">
-        <span className="brand-mark">S</span>
-        <div>
-          <strong>Slivasa</strong>
-          <span>Restaurant &amp; Café</span>
-        </div>
-      </header>
-
       <FlipBook />
     </main>
   );
